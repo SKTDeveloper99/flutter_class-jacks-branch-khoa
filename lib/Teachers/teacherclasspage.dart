@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_class/Accounts/authentication.dart';
 import 'package:flutter_class/Teachers/questionare.dart';
 import 'package:flutter_class/welcome.dart';
@@ -38,7 +40,7 @@ class TcpState extends State<Tcp> with SingleTickerProviderStateMixin{
       db.collection("classes").doc(this.classID).collection("HW").get().then((value) {
         for (var x in value.docs){
           tmpHW.add(
-              TeacherHomework(x.data()!["title"], x.data()!["description"], x.data()!["date"],this.classID)
+              TeacherHomework(x.data()["title"]??"About Homework", x.data()["description"]??"Allow using outside materials", x.data()["date"] ?? "Semester",this.classID)
           );
         }
       });
@@ -46,7 +48,7 @@ class TcpState extends State<Tcp> with SingleTickerProviderStateMixin{
       db.collection("classes").doc(this.classID).collection("CM").get().then((value) {
         for (var x in value.docs){
           tmpMats.add(
-              ClassMaterial(x.data()!["title"], x.data()!["description"], x.data()!["file"], classID)
+              ClassMaterial(x.data()["title"] ??"Section 1.1", x.data()["description"]??"About research materials", x.data()["file"] ?? "Apply for all Sections", classID)
           );
         }
       });
@@ -136,93 +138,110 @@ class TcpState extends State<Tcp> with SingleTickerProviderStateMixin{
       body: TabBarView(
           controller: _tabController, // Assign the TabController
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-               FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                    future: fetchHW(), // Call your fetchData function here
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                            child:
-                            CircularProgressIndicator()); // Display a loading indicator while waiting for data
-                      } else if (snapshot.hasError) {
-                        return Center(
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                 FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                      future: fetchHW(), // Call your fetchData function here
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                              child:
+                              CircularProgressIndicator()); // Display a loading indicator while waiting for data
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text(
+                                  'Error fetching data')); // Display an error message if data fetching fails
+                        } else if (!snapshot.hasData) {
+                          return Center(
+                              child: Text(
+                                  'No data available')); // Display a message if no data is available
+                        }
+                        if (homework.isEmpty) {
+                          return Center(
                             child: Text(
-                                'Error fetching data')); // Display an error message if data fetching fails
-                      } else if (!snapshot.hasData) {
-                        return Center(
-                            child: Text(
-                                'No data available')); // Display a message if no data is available
-                      } else {
-                        // Build your UI using the fetched data
-                        // You can access the data using snapshot.data
-                        final data = snapshot.data!;
-
-                             // Extract the data from the DocumentSnapshot
-                        List<TeacherHomework> tmpHW = [];
-
-                          for (var x in data.docs) {
-
-                            tmpHW.add(
-                                TeacherHomework(x.data()!["title"],
-                                    x.data()!["description"], x.data()!["date"],
-                                    this.classID)
-                            );
-                          }
-                          homework = tmpHW;
-                        return Container(
-                          height: height/1.3,
-                          width: width,
-                          child: ListView(
-                            children: homework,
-                          ),
-                        );}}),
-              ],
-            ),
-            // Widgets for Tab 1
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                    future: fetchCM(), // Call your fetchData function here
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                            child:
-                            CircularProgressIndicator()); // Display a loading indicator while waiting for data
-                      } else if (snapshot.hasError) {
-                        return Center(
-                            child: Text(
-                                'Error fetching data')); // Display an error message if data fetching fails
-                      } else if (!snapshot.hasData) {
-                        return Center(
-                            child: Text(
-                                'No data available')); // Display a message if no data is available
-                      } else {
-                        // Build your UI using the fetched data
-                        // You can access the data using snapshot.data
-                        final data = snapshot.data!;
-
-                        // Extract the data from the DocumentSnapshot
-                        List<ClassMaterial> tmpMats = [];
-
-                        for (var x in data.docs) {
-
-                          tmpMats.add(
-                              ClassMaterial(x.data()!["title"], x.data()!["description"], x.data()!["file"], classID)
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                                'No Homework at Present'
+                            ),
                           );
                         }
-                        classmaterials = tmpMats;
-                        return Container(
-                          height: height/1.3,
-                          width: width,
-                          child: ListView(
-                            children: classmaterials,
-                          ),
-                        );}}),
 
-              ],
+                        else {
+                          // Build your UI using the fetched data
+                          // You can access the data using snapshot.data
+                          final data = snapshot.data!;
+              
+                               // Extract the data from the DocumentSnapshot
+                          List<TeacherHomework> tmpHW = [];
+              
+                            for (var x in data.docs) {
+              
+                              tmpHW.add(
+                                  TeacherHomework(x.data()["title"] ?? "About Homework",
+                                      x.data()["description"] ?? "Allow outside research", x.data()["date"] ?? "Semester",
+                                      this.classID)
+                              );
+                            }
+                            homework = tmpHW;
+                          return Container(
+                            height: height/1.3,
+                            width: width,
+                            child: ListView(
+                              children: homework,
+                            ),
+                          );}}),
+                ],
+              ),
+            ),
+            // Widgets for Tab 1
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                      future: fetchCM(), // Call your fetchData function here
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                              child:
+                              CircularProgressIndicator()); // Display a loading indicator while waiting for data
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text(
+                                  'Error fetching data')); // Display an error message if data fetching fails
+                        } else if (!snapshot.hasData) {
+                          return Center(
+                              child: Text(
+                                  'No data available')); // Display a message if no data is available
+                        } else {
+                          // Build your UI using the fetched data
+                          // You can access the data using snapshot.data
+                          final data = snapshot.data!;
+              
+                          // Extract the data from the DocumentSnapshot
+                          List<ClassMaterial> tmpMats = [];
+              
+                          for (var x in data.docs) {
+              
+                            tmpMats.add(
+                                ClassMaterial(x.data()["title"] ??"Section 1.1", x.data()["description"]??"About research materials", x.data()["file"] ?? "Apply for all Sections", classID)
+
+                            );
+                          }
+                          classmaterials = tmpMats;
+                          return Container(
+                            height: height/1.3,
+                            width: width,
+                            child: ListView(
+                              children: classmaterials,
+                            ),
+                          );}}),
+              
+                ],
+              ),
             ),
             // Widgets for Tab 2
             Column(

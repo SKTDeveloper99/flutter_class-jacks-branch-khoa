@@ -229,44 +229,44 @@ class _SignupState extends State<Signup> {
                   ),
                 ),
               ),
-              const SizedBox(height: 5,),
-              Text("-or-",
-                style: TextStyle(
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black,
-                  fontSize: 15,
-                  fontFamily: "Merriweather",
-                ),
-              ),
-              const SizedBox(height: 5,),
-              SizedBox(
-                height: 50,
-                width: 500,
-                child: ElevatedButton(
-                  onPressed: (){
-                    AuthService().signInWithGoogle();
-                  },
-                  child: Text("Continue With Google",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: "Metropolis",
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5.0,
-                    backgroundColor: Colors.lightBlue[900],
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(
-                        color: Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              // const SizedBox(height: 5,),
+              // Text("-or-",
+              //   style: TextStyle(
+              //     fontWeight: FontWeight.w800,
+              //     color: Colors.black,
+              //     fontSize: 15,
+              //     fontFamily: "Merriweather",
+              //   ),
+              // ),
+              //const SizedBox(height: 5,),
+              // SizedBox(
+              //   height: 50,
+              //   width: 500,
+              //   child: ElevatedButton(
+              //     onPressed: (){
+              //       AuthService().signInWithGoogle();
+              //     },
+              //     child: Text("Continue With Google",
+              //       style: TextStyle(
+              //         fontWeight: FontWeight.w800,
+              //         color: Colors.white,
+              //         fontSize: 20,
+              //         fontFamily: "Metropolis",
+              //       ),
+              //     ),
+              //     style: ElevatedButton.styleFrom(
+              //       elevation: 5.0,
+              //       backgroundColor: Colors.lightBlue[900],
+              //       shadowColor: Colors.transparent,
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //         side: BorderSide(
+              //           color: Colors.transparent,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),

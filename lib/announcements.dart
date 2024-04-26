@@ -78,7 +78,36 @@ class AnounceState extends State<Anounce> {
             Container(
               height: height / 1.3,
               width: 300,
-              child: ListView(
+              child:
+              announce.isEmpty ?
+                   SingleChildScrollView(
+                    child:  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Card(
+                              child: Text(
+                                  "Disciplines of A Teacher",
+                                style: TextStyle(
+                                  fontSize: 40,
+                                ),
+                              ),
+                          ),
+                          const Card(
+                            child: Text(
+                              "Always be a friend with students \n Always Listen to what Student says \n Always be fair to every students",
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          Image.network("https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/advisor/wp-content/uploads/2023/06/teacher-and-students.jpeg.jpg")
+                        ],
+                      ),
+                    ),
+                  ):
+              ListView(
                 children: announce,
               ),
             )

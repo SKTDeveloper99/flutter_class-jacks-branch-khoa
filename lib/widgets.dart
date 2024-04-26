@@ -1,6 +1,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_class/Teachers/submission.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -180,12 +182,12 @@ class TeacherHomework extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Submission(this.classID,this.title)));
-      },
+      // onTap: () {
+      //
+      //   Navigator.push(
+      //       context,
+      //       MaterialPageRoute(builder: (context) => Submission(this.classID,this.title)));
+      // },
       child: Container(
         margin: EdgeInsets.all(10),
         height: 150,
@@ -195,39 +197,41 @@ class TeacherHomework extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           color: Colors.blue[100],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Icon(Icons.check_circle, color: Colors.red, size: 30,),
-                SizedBox(width: 10,),
-                Text(title, style: TextStyle(
-                  fontSize: 40,
-                  fontFamily: "Metropolis",
-                ),),
-              ],
-            ),
-            Divider(
-              color: Colors.black,
-              thickness: 3,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(date,style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: "Merriweather",
-                ),),
-                Text(description,style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: "Merriweather",
-                ),),
-              ],
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.check_circle, color: Colors.red, size: 30,),
+                  SizedBox(width: 10,),
+                  Text(title, style: TextStyle(
+                    fontSize: 40,
+                    fontFamily: "Metropolis",
+                  ),),
+                ],
+              ),
+              Divider(
+                color: Colors.black,
+                thickness: 3,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(date,style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "Merriweather",
+                  ),),
+                  Text(description,style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "Merriweather",
+                  ),),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -427,21 +431,21 @@ class Homework extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        if (submitted) {
-          db.collection("classes").doc(this.classID).collection("HW").doc(title).collection("submissions").doc(Auth.getUID()).get().then((value) {
-            final Uri url = Uri.parse(value["feedback"]);
-            launchUrl(url);
-          });
-
-
-        }
-        else {
-          _pickPDF(); _uploadPDF();
-
-        }
-
-        },
+      // onTap: () {
+      //   if (submitted) {
+      //     db.collection("classes").doc(this.classID).collection("HW").doc(title).collection("submissions").doc(Auth.getUID()).get().then((value) {
+      //       final Uri url = Uri.parse(value["feedback"]);
+      //       launchUrl(url);
+      //     });
+      //
+      //
+      //   }
+      //   else {
+      //     _pickPDF(); _uploadPDF();
+      //
+      //   }
+      //
+      //   },
       child: Container(
         margin: EdgeInsets.all(10),
         height: 150,
@@ -560,10 +564,10 @@ class ClassMaterial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        _pickPDF(); _uploadPDF();
-
-      },
+      // onTap: () {
+      //   _pickPDF(); _uploadPDF();
+      //
+      // },
       child: Container(
         margin: EdgeInsets.all(10),
         height: 150,
@@ -681,15 +685,15 @@ class StudentClassMaterial extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        db.collection("classes").doc(this.classID).collection("CM").doc(title).get().then((value) {
-         if (value["file"] != "") {
-           final Uri url = Uri.parse(value["file"]);
-           launchUrl(url);
-         }
-
-        });
-      },
+      // onTap: () {
+      //   db.collection("classes").doc(this.classID).collection("CM").doc(title).get().then((value) {
+      //    if (value["file"] != "") {
+      //      final Uri url = Uri.parse(value["file"]);
+      //      launchUrl(url);
+      //    }
+      //
+      //   });
+      // },
       child: Container(
         margin: EdgeInsets.all(10),
         height: 150,
@@ -756,9 +760,9 @@ class Students extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-
-      },
+      // onTap: () {
+      //
+      // },
       child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           future: fetchStudent(), // Call your fetchData function here
           builder: (context, snapshot) {
@@ -795,23 +799,25 @@ class Students extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   color: Colors.blue[100],
                 ),
-                child: Column(
-                  children: [
-
-                    Container(
-                        margin: EdgeInsets.all(12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(Icons.person),
-                            SizedBox(width: 10,),
-                            Text(email, style: TextStyle(
-                                fontSize: 20
-                            ),),
-
-                          ],)
-                    ),
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                  
+                      Container(
+                          margin: EdgeInsets.all(12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(Icons.person),
+                              SizedBox(width: 10,),
+                              Text(email, style: TextStyle(
+                                  fontSize: 20
+                              ),),
+                  
+                            ],)
+                      ),
+                    ],
+                  ),
                 ),
               );}}),
 
@@ -852,37 +858,42 @@ class Anouncement extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           color: Colors.blue[100],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(title, style: TextStyle(
-                  fontSize: 40,
-                  fontFamily: "Metropolis",
-                ),),
-              ],
-            ),
-            Divider(
-              color: Colors.black,
-              thickness: 3,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(date,style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: "Merriweather",
-                ),),
-                Text(description,style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: "Merriweather",
-                ),),
-              ],
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(title, style: TextStyle(
+                      fontSize: 40,
+                      fontFamily: "Metropolis",
+                    ),),
+                  ],
+                ),
+              ),
+              Divider(
+                color: Colors.black,
+                thickness: 3,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                // mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(date,style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "Merriweather",
+                  ),),
+                  Text(description,style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: "Merriweather",
+                  ),),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
